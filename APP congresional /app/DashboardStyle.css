@@ -1,0 +1,271 @@
+/* ---------- DESIGN VALUES: Pre made val ues so i dont have to change them everywhere :-)---------- */
+:root {
+  /* colors */
+  --blue: #2563eb;              /* main blue color */
+  --blue-dark: #1e40af;         /* The shadow blue for bottom of the sidebar */
+  --text: #1e3a8a;              /* another blue for regular text */
+  --page: #f4f6fb;              /* page background */
+  --card: #ffffff;              /* card background */
+  --radius: 14px;               
+  --shadow: 0 2px 10px rgba(30, 58, 138, 0.07);   
+
+  /* sizes (these shrink on smaller screens, see the bottom of the file) */
+  --page-gap: 24px;             /* space between the edge of the screen and everything */
+  --side-gap: 24px;             /* space between the sidebar and the cards */
+  --gap: 17px;                  /* space between cards */
+  --sidebar-w: 227px;           /* sidebar width */
+  --side-radius: 30px;
+  --side-pad-y: 36px;
+  --side-x: 34px;               /* left space for the logo + tab names */
+  --logo-size: 20px;
+  --logo-case: uppercase;
+  --logo-gap: 60px;
+  --tab-size: 14px;
+  --topbar-h: 70px;
+  --greeting-size: 28px;
+  --card-min: 220px;
+  --card-text: 22px;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background-color: var(--page);
+  margin: 0;
+  padding: var(--page-gap);
+}
+
+/* ---------- THE WHOLE PAGE: sidebar on the left, cards on the right ---------- */
+.app {
+  display: flex;
+  min-height: calc(100vh - 2 * var(--page-gap));   /* fills the full height of the screen */
+}
+
+.shell {
+  display: flex;
+  flex: 1;
+  gap: var(--side-gap);
+  min-width: 0;
+}
+
+/* ---------- SIDEBAR (always on the left, full height, stays put when you scroll) ---------- */
+.sidebar {
+  flex: 0 0 var(--sidebar-w);
+  position: sticky;
+  top: var(--page-gap);
+  align-self: flex-start;
+  height: calc(100vh - 2 * var(--page-gap));
+  box-sizing: border-box;
+  padding: var(--side-pad-y) 0;
+  border-radius: var(--side-radius);
+  background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+  box-shadow: 0 18px 40px rgba(37, 99, 235, 0.3);
+}
+
+.website-name {
+  padding: 0 var(--side-x);
+  margin-bottom: var(--logo-gap);
+}
+
+.website-name h1 {
+  margin: 0;
+  font-size: var(--logo-size);
+  font-weight: 700;
+  text-transform: var(--logo-case);
+  letter-spacing: 0.3px;
+  color: #ffffff;
+}
+
+/* the tab bar (stacked in the sidebar) */
+.dashboard-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* each tab */
+.tab {
+  position: relative;
+  font-family: inherit;
+  font-size: var(--tab-size);
+  font-weight: 500;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.7);   /*for unslected tab*/
+  background: none;
+  border: none;
+  padding: 14px var(--side-x);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.tab:hover {
+  color: #ffffff;
+}
+
+/* the selected tab: bright white text + the little white notch on the left edge */
+.tab.active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.tab.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 6px;
+  background-color: #ffffff;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ---------- greeting on top, cards fill the rest of the page ---------- */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* top card with the greeting */
+.topbar {
+  display: flex;
+  align-items: center;
+  min-height: var(--topbar-h);
+  box-sizing: border-box;
+  padding: 8px 24px;
+  border-radius: var(--radius);
+}
+
+.greeting {
+  margin: 0;
+  font-size: var(--greeting-size);
+  font-weight: 800;
+  color: var(--text);
+}
+
+.start h2 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* ---------- a grid that fills all the space left on the pag ---------- */
+.cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  grid-auto-rows: minmax(var(--card-min), 1fr);   /* rows stretch to fill the height */
+  gap: var(--gap);
+}
+
+.dropdown {
+  box-sizing: border-box;
+  padding: 24px;
+  background-color: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+}
+
+/* the card of the selected tab pops up with a bigger shadow */
+.dropdown.open {
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.18);
+}
+
+.dropdown h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.dropdown p {
+  margin: 0;
+  font-size: var(--card-text);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+/* ---------- THE POP UP---------- */
+.dropdown {
+  display: none;
+}
+
+.dropdown.open {
+  display: block;
+  animation: pop-up 0.25s ease-out;
+}
+
+@keyframes pop-up {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/*MOBILE OR SCREEN RESIZING SETTINGS!!!!!!!!*/
+/* ---------- makes a smaller screen ---------- */
+
+/* tablets / small laptop windows */
+@media (max-width: 1000px) {
+  :root {
+    --page-gap: 18px;
+    --side-gap: 18px;
+    --gap: 14px;
+    --sidebar-w: 190px;
+    --side-radius: 26px;
+    --side-pad-y: 28px;
+    --side-x: 26px;
+    --logo-size: 18px;
+    --logo-gap: 44px;
+    --greeting-size: 24px;
+    --card-min: 180px;
+    --card-text: 20px;
+  }
+}
+
+/* phones */
+@media (max-width: 640px) {
+  :root {
+    --page-gap: 10px;
+    --side-gap: 10px;
+    --gap: 10px;
+    --sidebar-w: 128px;
+    --side-radius: 22px;
+    --side-pad-y: 22px;
+    --side-x: 14px;
+    --logo-size: 13px;
+    --logo-case: none;
+    --logo-gap: 28px;
+    --tab-size: 13px;
+    --topbar-h: 56px;
+    --greeting-size: 20px;
+    --card-min: 120px;
+    --card-text: 17px;
+  }
+
+  .topbar {
+    padding: 8px 16px;
+  }
+
+  .dropdown {
+    padding: 18px;
+  }
+
+  .tab {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* very small phones */
+@media (max-width: 400px) {
+  :root {
+    --sidebar-w: 112px;
+    --side-x: 10px;
+    --logo-size: 12px;
+    --tab-size: 12px;
+  }
+}
