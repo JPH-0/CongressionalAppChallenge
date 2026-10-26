@@ -269,3 +269,123 @@ body {
     --tab-size: 12px;
   }
 }
+
+.login-card {
+  max-width: 380px;
+  margin: 10vh auto 0;
+  padding: 36px 32px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.login-logo {
+  margin: 0 0 8px;
+  font-size: var(--logo-size);
+  letter-spacing: 1px;
+  text-transform: var(--logo-case);
+  color: var(--blue);
+}
+
+.login-tagline {
+  margin: 0 0 24px;
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.login-or {
+  margin: 20px 0 14px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+.login-card .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-card .field input {
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.login-card .field input:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.login-card .small-btn {
+  padding: 11px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-card .small-btn.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.login-card .small-btn.primary:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+}
+
+.google-btn {
+  width: 100%;
+}
+
+.login-message {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 13px;
+}
+
+.login-message[hidden] {
+  display: none;
+}
+
+.login-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.login-card .link-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.login-card .link-btn:hover {
+  text-decoration: underline;
+}
