@@ -584,12 +584,12 @@ function saveToCloud(field, value) {
 }
 
 $("signOut").addEventListener("click", function () {
-    signOut(auth).then(function () { location.replace("login.html"); });
+    signOut(auth).then(function () { location.replace("index.html"); });
 });
 
 onAuthStateChanged(auth, async function (user) {
     if (!user) {
-        location.replace("login.html");   // signed-out visitors go to the login page
+        location.replace("index.html");   // signed-out visitors go to the login page
         return;
     }
 

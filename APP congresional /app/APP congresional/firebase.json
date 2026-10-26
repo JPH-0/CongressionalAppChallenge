@@ -2,7 +2,6 @@
   "firestore": { "rules": "firestore.rules" },
   "hosting": {
     "public": "app",
-    "ignore": ["firebase.json", "**/.*"],
-    "rewrites": [{ "source": "/", "destination": "/login.html" }]
+    "ignore": ["firebase.json", "**/.*"]
   }
 }
