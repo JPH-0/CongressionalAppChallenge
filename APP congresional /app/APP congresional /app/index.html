@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="DashboardStyle.css">
+    <title>Sign in - OptiSchedule</title>
+</head>
+<body>
+    <main class="login-card">
+        <h1 class="login-logo">OptiSchedule</h1>
+        <p class="login-tagline">Sign in to see your homework plan on any device.</p>
+
+        <button type="button" class="small-btn primary google-btn" id="googleBtn">Continue with Google</button>
+        <p class="login-or">or use your email</p>
+
+        <form id="loginForm" novalidate>
+            <label class="field">Email
+                <input type="email" id="email" autocomplete="email" required>
+            </label>
+            <label class="field">Password
+                <input type="password" id="password" autocomplete="current-password" minlength="6" required>
+            </label>
+            <p class="login-message" id="loginError" role="alert" hidden></p>
+            <button type="submit" class="small-btn primary" id="submitBtn">Sign in</button>
+        </form>
+
+        <div class="login-links">
+            <button type="button" class="link-btn" id="toggleMode">New here? Create an account!</button>
+            <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+        </div>
+    </main>
+
+    <script type="module">
+    // email + password (sign in or create account), Google, and password reset 
+    import {
+        GoogleAuthProvider,
+        createUserWithEmailAndPassword,
+        onAuthStateChanged,
+        sendPasswordResetEmail,
+        signInWithEmailAndPassword,
+        signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { auth } from "./firebase.js";
+
+    const $ = function (id) { return document.getElementById(id); };
+    let creating = false;   // false = signing in, true = creating an account
+
+    function showError(text) {
+        $("loginError").textContent = text;
+        $("loginError").hidden = !text;
+    }
+
+    // The errors for users! :D
+    function friendly(e) {
+        switch (e.code) {
+            case "auth/invalid-email": return "That email address doesn't look right.";
+            case "auth/missing-password": return "Enter your password.";
+            case "auth/weak-password": return "Use a password with at least 6 characters.";
+            case "auth/email-already-in-use": return "An account with that email already exists. Try signing in.";
+            case "auth/user-not-found":
+            case "auth/wrong-password":
+            case "auth/invalid-credential": return "Wrong email or password.";
+            case "auth/too-many-requests": return "Too many tries. Wait a minute and try again.";
+            case "auth/popup-closed-by-user":
+            case "auth/cancelled-popup-request": return "";
+            case "auth/network-request-failed": return "Can't reach the internet. Check your connection.";
+            default: return "Something went wrong. Please try again.";
+        }
+    }
+
+    function setMode(isCreating) {
+        creating = isCreating;
+        $("submitBtn").textContent = creating ? "Create account" : "Sign in";
+        $("toggleMode").textContent = creating ? "Already have an account? Sign in" : "New here? Create an account";
+        $("password").autocomplete = creating ? "new-password" : "current-password";
+        showError("");
+    }
+
+    async function run(action) {
+        showError("");
+        try {
+            await action();   // onAuthStateChanged below does the redirect :)
+        } catch (e) {
+            showError(friendly(e));
+        }
+    }
+
+    onAuthStateChanged(auth, function (user) {
+        if (user) location.replace("Dashboard.html");
+    });
+
+    $("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = $("email").value.trim();
+        const password = $("password").value;
+        run(function () {
+            return creating
+                ? createUserWithEmailAndPassword(auth, email, password)
+                : signInWithEmailAndPassword(auth, email, password);
+        });
+    });
+
+    $("googleBtn").addEventListener("click", function () {
+        run(function () { return signInWithPopup(auth, new GoogleAuthProvider()); });
+    });
+
+    $("toggleMode").addEventListener("click", function () { setMode(!creating); });
+
+    $("forgotBtn").addEventListener("click", function () {
+        const email = $("email").value.trim();
+        if (!email) {
+            showError("Type your email above first, then press Forgot password.");
+            return;
+        }
+        run(async function () {
+            await sendPasswordResetEmail(auth, email);
+            showError("");
+            alert("Check your email for a link to reset your password.");
+        });
+    });
+    </script>
+</body>
+</html>
